@@ -1,45 +1,28 @@
 import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Transition } from 'react-transition-group';
+
 interface CarImageProps {
   racing: boolean;
   car: number;
+  duration: number;
 }
 
-const duration = 1000;
-
-const defaultStyle = {
-  transition: `margin-left ${duration}ms ease-in-out`,
-  marginLeft: 0,
-}
-
-const transitionStyles: { [id:string] : React.CSSProperties; } = {
-  entering: { transform: 'translateX(0)' },
-  entered:  { transform: 'translateX(500px)' },
-  exiting:  { transform: 'translateX(0)' },
-  exited:   { transform: 'translateX(0)' },
+export const CarImage: React.FC<CarImageProps> = ({ racing, car, duration }) => {
+  const carStyle = racing ? { transform: 'translateX(80vw)', transitionDuration: `${duration}ms`, transitionTimingFunction: 'ease-in-out' } : {};
+  return (
+    <Image 
+      src={`/images/car${car}.gif`}
+      width={200} 
+      height={200} 
+      alt="car" 
+      className={`transform transition-transform ${racing ? 'translate-x-[80vw]' : ''}`}
+      style={carStyle}
+    />
+  );
 };
 
 
-
-export const CarImage: React.FC<CarImageProps> = ({ racing, car }) => (
-  <Transition in={racing} timeout={duration}>
-    {(state: string) => (
-      <Image 
-        src={`/images/car${car}.gif `}
-        width={200} 
-        height={200} 
-        alt="car" 
-        className="transition-all duration-1000"
-        style={{
-          ...defaultStyle,
-          ...transitionStyles[state]
-        }}
-      />
-    )}
-  </Transition>
-);
 
 export default function Races() {
   const [showCountdown, setShowCountdown] = useState(false);
@@ -88,15 +71,10 @@ export default function Races() {
         <div className="bg-gray-950">
         <hr className="mt-4 h-2 border-none bg-green-600"></hr>
         <hr className="h-2 border-none bg-white"></hr>
-        <CarImage racing={racing} car={1} />
-         {/* <Image src="/images/car1.gif" width={200} height={200} alt="car" 
-         className={`transition-all duration-1000 ${racing ? "ml-auto" : ""}`} /> */}
+        <CarImage racing={racing} car={1} duration={3500} />
          <hr className="mt-4 h-2 border-none bg-yellow-500"></hr>
         <hr className="mt-2 h-2 border-none bg-yellow-500"></hr>
-{/*         <Image src="/images/car2.gif" width={200} height={200} 
-alt="car" className={`${racing ? "ml-auto" : ""}`} />
- */}
-                <CarImage racing={racing} car={2} />
+                <CarImage racing={racing} car={2} duration={2500} />
 
         <hr className="mt-4 h-2 border-none bg-white"></hr>
         <hr className="h-2 border-none bg-green-600 "></hr>
